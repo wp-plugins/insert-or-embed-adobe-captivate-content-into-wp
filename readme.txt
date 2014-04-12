@@ -11,7 +11,7 @@ Quickly embed or insert Adobe Captivate content into a post or page.
 
 == Description ==
 
-This plugin will add a new toolbar icon (the letter ‘Cp’) next to the ‘Add Media’ button on the Edit Post and Edit Page pages and enable you to insert or embed Adobe Captivate content into WordPress. Upon clicking this toolbar icon, you will have the ability to upload your published Adobe Captivate content as a ZIP file. Once uploaded, the plugin will automatically extract the content, find the appropriate .html file, and add code to your post or page that will display your Adobe Captivate content as an iframe or a lightbox.
+This plugin will add a new toolbar icon (the letter 'Cp') next to the 'Add Media' button on the Edit Post and Edit Page pages and enable you to insert or embed Adobe Captivate content into WordPress. Upon clicking this toolbar icon, you will have the ability to upload your published Adobe Captivate content as a ZIP file. Once uploaded, the plugin will automatically extract the content, find the appropriate .html file, and add code to your post or page that will display your Adobe Captivate content as an iframe or a lightbox.
 
 == Installation ==
 
