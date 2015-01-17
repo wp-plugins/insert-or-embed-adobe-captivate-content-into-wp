@@ -1,14 +1,5 @@
 <?php
 
-function cap_get_slug_from_string($string) {
-  $string=strtolower($string);
-  $filtered_string = preg_replace('/[^a-zA-Z0-9\s]/', "", $string);
-  $filtered_string=str_replace(" ","_",$filtered_string);
-  return $filtered_string;
-}
-
-
-
 
 #********************************************************************************************************************************
 function cap_print_page_navi($num_records)
@@ -62,10 +53,11 @@ function cap_print_page_navi($num_records)
 		
 }
 
-
-
 function cap_print_detail_form($num, $tab="upload", $file_url="", $dirname="")
-{?>
+{
+$opt=get_cap_embeder_options();
+$cbox_themes=cap_embeder_get_colorbox_themes();
+?>
 
 	<div id="upload_detail_<?php echo $num ?>" style="display:none; margin-bottom:30px; margin-top:20px;">
 		<input type="hidden" size="40" name="file_url_<?php echo $num ?>" id="file_url_<?php echo $num ?>" value="<?php echo $file_url ?>" />
@@ -89,8 +81,49 @@ function cap_print_detail_form($num, $tab="upload", $file_url="", $dirname="")
 			<strong>More Lightbox options:</strong><br />
 			<input type="radio" name="more_lightbox_option_<?php echo $num ?>" value="1"  onclick="more_lightbox_option_clicked(<?php echo $num ?>)"/> Link Text <input type="text"  name="lightbox_link_text_<?php echo $num ?>" id="lightbox_link_text_<?php echo $num ?>" size="30" style="display:none;" /><br />
 			<input type="radio" name="more_lightbox_option_<?php echo $num ?>" value="2"  checked="checked"   onclick="more_lightbox_option_clicked(<?php echo $num ?>)"/> Use 'Launch Presentation' button<br />
-            <br />
-		</div>
+			<input type="radio" name="more_lightbox_option_<?php echo $num ?>" value="3"  onclick="more_lightbox_option_clicked(<?php echo $num ?>)"/> Use custom image<br />
+            
+			<div id="custom_button_area_<?php echo $num ?>" style="display:none;">
+				<select name="buttons_<?php echo $num ?>" id="buttons_<?php echo $num ?>" onchange="show_button(<?php echo $num ?>)">
+					<option value="0">Select Button</option>
+					<?php $nn=0; foreach($opt['buttons'] as $btn){$nn++;?>
+					<option value="<?php echo $btn;?>"><?php echo $nn;?></option>
+					<?php }?>
+				</select>
+				<div id="button_view_<?php echo $num ?>"></div>
+ 			</div>
+			<br/>
+			<strong>Scrollbar options:</strong><br />
+			<input type="radio" name="scrollbar_<?php echo $num ?>" value="yes" id="scrollbar_yes" checked="checked" /> Default - display if needed<br />
+			<input type="radio" name="scrollbar_<?php echo $num ?>" value="no" id="scrollbar_no" /> Disabled
+			<br />
+		<!--More lightbox options	-->
+			<?php if($opt['lightbox_script']=="colorbox"){?>
+			<label  style="width:78px; display:inline-block;">Theme</label>
+			<select name="colorbox_theme_<?php echo $num ?>" id="colorbox_theme_<?php echo $num ?>">
+				<option value="default_from_dashboard">Default From Dashboard</option>
+				<?php 
+				foreach($cbox_themes as $key=>$tm)
+				{?>
+				<option value="<?php echo $key ?>"><?php echo $tm["text"];?></option>		
+				<?php }?>
+			</select>
+			<br />
+			<?php }?>	
+			<label style="width:78px; display:inline-block;">Size Options</label>
+			<select name="size_opt_<?php echo $num ?>" id="size_opt_<?php echo $num ?>" onchange="show_hide_custom_size_area(<?php echo $num ?>)">
+				<option value="lightebox_default">Lightbox Default</option>
+				<option value="custom_form_dashboard">Custom from dashboard</option>
+				<option value="custom">Custom for this item</option>
+			</select>			
+			
+			<div id="custom_size_area_<?php echo $num ?>" style="display:none;">
+			<label style="width:80px; display:inline-block;" >Height</label><input style="padding:3px 5px" type="text" name="height_<?php echo $num ?>" id="height_<?php echo $num ?>" size="3" maxlength="4" value="" /><select name="height_type_<?php echo $num ?>" id="height_type_<?php echo $num ?>"><option value="px">px</option><option value="%">%</option></select><br />
+			<label style="width:80px; display:inline-block;" >Width</label><input  style="padding:3px 5px" type="text" name="width_<?php echo $num ?>" id="width_<?php echo $num ?>" size="3" maxlength="4" value="" /><select name="width_type_<?php echo $num ?>" id="width_type_<?php echo $num ?>"><option value="px">px</option><option value="%">%</option></select><br />
+			</div>
+			
+			
+		</div><!--end lightbox options-->
 	
 		<div id="new_window_option_box_<?php echo $num ?>" style="display:none">
 		<strong>Link that opens in a new window options:</strong><br />
@@ -104,16 +137,8 @@ function cap_print_detail_form($num, $tab="upload", $file_url="", $dirname="")
 		<input type="radio" name="open_same_window_option_<?php echo $num ?>" value="2"  checked="checked" onclick="open_same_window_option_clicked(<?php echo $num ?>)" /> Use 'Launch Presentation' button<br />
         <br />
 		</div>
-		<!-- hide restrictions -->
-		<!--
-		<div>
-		<strong>Restrict access to the content by user or group:</strong><br />
-		<input type="radio" name="restrict_access_option_<?php echo $num ?>" value="1" id="restrict_access_option_<?php echo $num ?>" onclick="restrict_access_option_clicked(<?php echo $num ?>)" /> Yes<br />
-		<input type="radio" name="restrict_access_option_<?php echo $num ?>" value="2" class="restrict_access_option_no"  checked="checked"  onclick="restrict_access_option_clicked(<?php echo $num ?>)" /> No<br />
-        <br />
-		</div>
 		<br />
-		<div class="userAndGroupsSection" id="userAndGroupsSection_<?php echo $num;?>"></div> -->
+
 		
 		<div>
 			<input type="button" class="button" name="insert_<?php echo $num ?>" id="insert_<?php echo $num ?>" value="Insert Into Post" onclick="add_to_post(<?php echo $num ?>)" /> 
@@ -173,12 +198,11 @@ function cap_printInsertForm()
 
 			endforeach;
 		echo "</table>";
-		
 	
 	}
 	else
 	{
-	echo "no directories available";
+	echo "Once you upload content, you'll see it here.";
 	}
 //echo "<h3>End cap_printInsertForm</h3>";	
 }
@@ -309,21 +333,18 @@ return false;
 }
 
 
-
 function cap_print_js($tab="upload") #added by oneTarek
 {
 wp_enqueue_script("jquery");
 ?>
-<link rel="stylesheet" href="<?php echo WP_CAP_EMBEDER_PLUGIN_URL."css/style.css"; ?>" />
+<link rel="stylesheet" href="<?php echo WP_CAP_EMBEDER_PLUGIN_URL."css/style.css?var=";echo time(); ?>" />
 <script src="<?php echo cap_getPluginUrl()."js/jquery.form.js";?>" ></script>
-<script src="<?php echo cap_getPluginUrl()."js/popupwindow/jquery.popupwindow.js";?>" ></script>
 
 <script>
+
 var LOADING_IMAGE="<?php echo WP_CAP_EMBEDER_PLUGIN_URL."loading.gif"; ?>";
 var LOADING_IMAGE_16="<?php echo WP_CAP_EMBEDER_PLUGIN_URL."loading_16x16.gif"; ?>"; 
-var groupList;
-var userList;
-var selectedGroupId
+
 function loading_html(size){
 
 	var html="";
@@ -400,63 +421,8 @@ function loading_html(size){
 			}
 			
 			});  
+				
 
-
-		//*******************************START SEARCH TECHNIQUE **************************************
-		//search technique help: http://www.marceble.com/2010/02/simple-jquery-table-row-filter/
-		//Declare the custom selector 'containsIgnoreCase'.
-      jQuery.expr[':'].containsIgnoreCase = function(n,i,m){
-          return jQuery(n).text().toUpperCase().indexOf(m[3].toUpperCase())>=0;
-      };
-	  
-      jQuery("#userSearchInput").keyup(function(){
-	//hide all the rows
-          jQuery("#userList").find("div").hide();
-
-	//split the current value of searchInput
-          var data = this.value.split(" ");
-	//create a jquery object of the rows
-          var jo = jQuery("#userList").find("div");
-          
-	//Recusively filter the jquery object to get results.
-          jQuery.each(data, function(i, v){
-              jo = jo.filter("*:containsIgnoreCase('"+v+"')");
-          });
-        //show the rows that match.
-          jo.show();
-     //Removes the placeholder text  
-   
-      }).focus(function(){
-          this.value="";
-          jQuery(this).css({"color":"black"});
-          jQuery(this).unbind('focus');
-      }).css({"color":"#C0C0C0"});
-	  
-	  
-      jQuery("#groupSearchInput").keyup(function(){
-	//hide all the rows
-          jQuery("#groupList").find("div").hide();
-
-	//split the current value of searchInput
-          var data = this.value.split(" ");
-	//create a jquery object of the rows
-          var jo = jQuery("#groupList").find("div");
-          
-	//Recusively filter the jquery object to get results.
-          jQuery.each(data, function(i, v){
-              jo = jo.filter("*:containsIgnoreCase('"+v+"')");
-          });
-        //show the rows that match.
-          jo.show();
-     //Removes the placeholder text  
-   
-      }).focus(function(){
-          this.value="";
-          jQuery(this).css({"color":"black"});
-          jQuery(this).unbind('focus');
-      }).css({"color":"#C0C0C0"});	  
-	  
-	  //*******************************END SEARCH TECHNIQUE **************************************	
 
 			
 }); // end jQuery(document).ready()
@@ -533,6 +499,7 @@ switch(insert_as)
 	}// end switch
 }
 
+
 function lightbox_option_clicked(number)
 {
 var lightbox_option= parseInt(jQuery('input[name=lightbox_option_'+number+']:checked').val());
@@ -552,6 +519,7 @@ var lightbox_option= parseInt(jQuery('input[name=lightbox_option_'+number+']:che
 
 }
 
+
 function more_lightbox_option_clicked(number)
 {
 var more_lightbox_option= parseInt(jQuery('input[name=more_lightbox_option_'+number+']:checked').val());
@@ -560,14 +528,31 @@ var more_lightbox_option= parseInt(jQuery('input[name=more_lightbox_option_'+num
 	  case 1:
 	  {
 	  show_box("lightbox_link_text", number);
+	  hide_box("custom_button_area", number);
 	  break;
 	  }
 	  case 2:
 	  {
 	  hide_box("lightbox_link_text", number);
+	  hide_box("custom_button_area", number);
 	  break;
 	  }
+	  case 3:
+	  {
+	  hide_box("lightbox_link_text", number);
+	  show_box("custom_button_area", number);
+	  break;
+	  }	  
 	}
+}
+
+function show_button(number)
+{
+	var btn_src=jQuery("#buttons_"+number).val();
+	if(btn_src=='0')
+	jQuery("#button_view_"+number).html('');
+	else
+	jQuery("#button_view_"+number).html('<img src="'+btn_src+'" />');
 }
 
 function open_new_window_option_clicked(number)
@@ -609,34 +594,6 @@ var open_same_window_option= parseInt(jQuery('input[name=open_same_window_option
 }
 
 
-function restrict_access_option_clicked(number)
-{
-var restrict_access_option= parseInt(jQuery('input[name=restrict_access_option_'+number+']:checked').val());
-	switch(restrict_access_option)
-	{
-	  case 1:
-	  {
-	  jQuery('#userAndGroupsSection_'+number).append( jQuery('#usersAndGroupsBox') );  // Moving Element:  http://www.elated.com/articles/jquery-removing-replacing-moving-elements/
-	  jQuery('#usersAndGroupsBox').show('slow'); 
-	  jQuery('.restrict_access_option_no').attr('checked',true); // set all same option to "no" 
-	  jQuery('#restrict_access_option_'+number).attr('checked',true); // set current option to "yes"
-	  
-	  
-	  break;
-	  }
-	  case 2:
-	  {
-	  jQuery("#usersAndGroupsBox").hide();
-	  jQuery("#usersAndGroupsBoxBackupHolder").append( jQuery('#usersAndGroupsBox') );
-	  break;
-	  }
-	}
-
-}
-
-
-
-
 
 function add_to_post(number)
 {
@@ -648,7 +605,7 @@ function add_to_post(number)
 	  var new_name=jQuery.trim(jQuery("#title").val());
 	  if(new_name!="" && new_name!=temp)
 	  {
-	  cap_rename_dir(old_name, new_name);
+	  rename_dir(old_name, new_name);
 	  }
 	  else
 	  {
@@ -661,6 +618,8 @@ function add_to_post(number)
 
 function insert_into_post(number)
 {
+<?php $opt=get_cap_embeder_options();?>
+var lightbox_script="<?php echo $opt["lightbox_script"]; ?>";
 var link_text='';
 var uploaded_file_url=jQuery("#file_url_"+number+"").val();
 if(uploaded_file_url==""){alert("Please Upload A Zip File"); return;}
@@ -693,6 +652,13 @@ var insert_as= parseInt(jQuery('input[name=insert_as_'+number+']:checked').val()
 			  link_text=jQuery('#lightbox_link_text_'+number+'').val();
 			  shortCodeOptions=shortCodeOptions+" link_text='"+link_text+"'";
 			}
+			else if(more_lightbox_option==3)
+			{
+			  var btn_src=jQuery("#buttons_"+number).val();
+			  if(btn_src !='0')
+			  shortCodeOptions=shortCodeOptions+" button='"+btn_src+"'";
+			}
+						
 		
 			var lightbox_option= parseInt(jQuery('input[name=lightbox_option_'+number+']:checked').val());
 			if(lightbox_option==1)
@@ -700,6 +666,32 @@ var insert_as= parseInt(jQuery('input[name=insert_as_'+number+']:checked').val()
 			var lightbox_title= jQuery('#lightbox_title_'+number+'').val();
 			shortCodeOptions=shortCodeOptions+" title='"+lightbox_title+"'";
 			}
+			//MORE NEW SETTINGS
+			if(lightbox_script=="colorbox")
+			{
+				var colorbox_theme=jQuery("#colorbox_theme_"+number).val();
+				if(colorbox_theme !="default_from_dashboard")
+				shortCodeOptions=shortCodeOptions+" colorbox_theme='"+colorbox_theme+"'";
+			}
+			
+			//SCROLLBAR OPTIONS		
+			var scrollbar= jQuery('input[name=scrollbar_'+number+']:checked').val();
+			if(scrollbar=='no'){shortCodeOptions=shortCodeOptions+" scrollbar='no'";}
+			
+			//SIZE OPTIONS
+			var size_opt=jQuery("#size_opt_"+number).val();
+			shortCodeOptions=shortCodeOptions+" size_opt='"+size_opt+"'";
+			if(size_opt=="custom")
+			{
+				var w=parseInt(jQuery("#width_"+number).val());
+				var wt=jQuery("#width_type_"+number).val();
+				var h=parseInt(jQuery("#height_"+number).val());
+				var ht=jQuery("#height_type_"+number).val();
+				var width=""+w+wt; var height=""+h+ht;
+				shortCodeOptions=shortCodeOptions+" width='"+width+"'";
+				shortCodeOptions=shortCodeOptions+" height='"+height+"'";
+			}
+			
 			
 	  break;
 	  }
@@ -737,12 +729,6 @@ var insert_as= parseInt(jQuery('input[name=insert_as_'+number+']:checked').val()
 	  }	  
 	}
 	
-	if(restrict_access_option==1)
-	{
-	var users=get_all_checked('#userList');
-	var groups=get_all_checked('#groupList');
-	shortCodeOptions=shortCodeOptions+" users='"+users+"' groups='"+groups+"' ";
-	}
 	shortCode="[cap_iframe_loader type='"+shortCodeType+"' " +shortCodeOptions+"]";
 	win.send_to_editor(shortCode);
 
@@ -808,19 +794,6 @@ function delete_dir(number)
 					
 }// end delete_dir()	
 
-function getGroupListHtmlForTab()
-{
-	var disabled=""; 
-	var html="";
-	var i;
-	for(i=0; i<groupList.length; i++)
-	{
-	html=html+'<div class="groupListItemForTab"><input type="checkbox" name="'+groupList[i].slug+'" value="'+groupList[i].id+'" /><label for="'+groupList[i].slug+'" > '+groupList[i].name+'</label> | <span class="showHideMembersButton">Show Members</span><span class="membersListInTab"></span></div>'; 
-	}
-	return html;
-}
-
-
 
 		
 </script>
@@ -847,7 +820,6 @@ if ( $u < 0 ) {
 } else {
 	$upload_size_unit = (int) $upload_size_unit;
 }
-
 $dirs = cap_getDirs();
 if (count($dirs)>1)
 {
@@ -868,20 +840,12 @@ else
 
 <p><i>Please choose a .zip file that you published with the Adobe Captivate software | Maximum upload file size: <strong><?php echo $upload_size_unit; echo $sizes[$u]; ?></strong></i></p>
 <img id="media_loading" style='display:none;' src= "<?php echo cap_getPluginUrl() . "loading.gif" ;?>" /><br />
-<?php
-} 
+<?php 
+}
  	cap_print_detail_form(1);
 ?>
 
 
-<!-- hide screenr
-<p><b>Need help?  See the screencast below:</b></p>
-<iframe src="http://www.screenr.com/embed/xzt8" width="600" height="366" frameborder="0"></iframe>
-<p/>
-<p/>
-<iframe src="http://www.elearningplugins.com/wordpresspluginlatestadobecaptivate.html" width="600px" frameborder="0">
-</iframe><p/>
--->
 
 <p><b>Need help?  See the screencast below:</b></p>
 <iframe width="560" height="315" src="//www.youtube.com/embed/zb4eANMb9Ew?rel=0" frameborder="0" allowfullscreen></iframe>
@@ -889,7 +853,6 @@ else
 <p/>
 <iframe src="http://www.elearningplugins.com/wordpresspluginlatestadobecaptivatetrial.html" width="600px" frameborder="0">
 </iframe><p/>
-
 
 
 <?php
@@ -1048,19 +1011,101 @@ function cap_rrmdir($dir) {
 
 /*-----added by oneTarek-----*/
 
+
 function cap_embeder_wp_head()
-{?>
+{
+$opt=get_cap_embeder_options();
+global $cap_embeder_size_opt;
+global $cap_embeder_width;
+global $cap_embeder_height;
+global $cap_embeder_scrollbar;
+if(isset($cap_embeder_size_opt))
+	{
+	if($cap_embeder_size_opt=="custom_form_dashboard"){$cap_embeder_width=$opt['width'].$opt['width_type']; $cap_embeder_height=$opt['height'].$opt['height_type'];}
+	}
+
+?>
 	<!--CAP_EMBEDER START-->
-	<link rel="stylesheet" href="<?php echo WP_CAP_EMBEDER_PLUGIN_URL."colorbox/colorbox.css" ;?>" />
+<?php 	
+	if($opt["lightbox_script"]=="nivo_lightbox")
+	{
+?>
+	<!--nivo lite box-->
+	<link rel="stylesheet" href="<?php echo WP_CAP_EMBEDER_PLUGIN_URL?>nivo-lightbox/nivo-lightbox.css" type="text/css" />
+	<link rel="stylesheet" href="<?php echo WP_CAP_EMBEDER_PLUGIN_URL?>nivo-lightbox/themes/default/default.css" type="text/css" />
+	<?php if($cap_embeder_size_opt!="lightebox_default"){ ?>
+	<style type="text/css">
+	.nivo-lightbox-content {
+	width: <?php echo $cap_embeder_width; ?>;
+	height: <?php echo $cap_embeder_height; ?>;
+	margin:auto;
+	}
+		<?php if(isset($cap_embeder_scrollbar) && $cap_embeder_scrollbar=="no"){?>
+		.nivo-lightbox-content iframe{
+		width: <?php echo $cap_embeder_width; ?>;
+		height: <?php echo $cap_embeder_height; ?>;
+		overflow:hidden;
+		}
+		<?php }?>
+	</style>
+	<?php }?>
+	<script src="<?php echo WP_CAP_EMBEDER_PLUGIN_URL?>nivo-lightbox/nivo-lightbox.min.js"></script>	
+	<!--end nivo lite box-->	
+<?php } else{
+	global $cap_embeder_colorbox_theme; if(!isset($cap_embeder_colorbox_theme) || $cap_embeder_colorbox_theme==""){$cap_embeder_colorbox_theme=$opt["colorbox_theme"];}
+	if($cap_embeder_size_opt!="custom_form_dashboard" && $cap_embeder_size_opt!="custom"){ $cap_embeder_width="80%"; $cap_embeder_height="80%";}//default
+?>
+	<!--CAP_EMBEDER START-->
+	<link rel="stylesheet" href="<?php echo WP_CAP_EMBEDER_PLUGIN_URL."colorbox/themes/".$cap_embeder_colorbox_theme."/colorbox.css" ;?>" />
 	<script type="text/javascript" src="<?php echo WP_CAP_EMBEDER_PLUGIN_URL."colorbox/jquery.colorbox-min.js" ;?>" ></script>
-	<script>
+<?php } ?>
+
+	<script type="text/javascript">
 		jQuery(document).ready(function($){
+			<?php if($opt["lightbox_script"]=="nivo_lightbox"){?>			
+			$('.nivo_lightbox_iframe').nivoLightbox({
+				effect: '<?php echo $opt['nivo_lightbox_effect'] ?>',                             // The effect to use when showing the lightbox
+				theme: 'default',                           // The lightbox theme to use
+				keyboardNav: true,                          // Enable/Disable keyboard navigation (left/right/escape)
+				clickOverlayToClose: true,                  // If false clicking the "close" button will be the only way to close the lightbox
+				onInit: function(){},                       // Callback when lightbox has loaded
+				beforeShowLightbox: function(){},           // Callback before the lightbox is shown
+				afterShowLightbox: function(lightbox){},    // Callback after the lightbox is shown
+				beforeHideLightbox: function(){},           // Callback before the lightbox is hidden
+				afterHideLightbox: function(){},            // Callback after the lightbox is hidden
+				onPrev: function(element){},                // Callback when the lightbox gallery goes to previous item
+				onNext: function(element){},                // Callback when the lightbox gallery goes to next item
+				errorMessage: 'The requested content cannot be loaded. Please try again later.' // Error message when content can't be loaded
+			});
+			<?php }else{?>
 			//Examples of how to assign the ColorBox event to elements
-			$(".colorbox_iframe").colorbox({iframe:true, width:"80%", height:"80%"});
+			$(".colorbox_iframe").colorbox({iframe:true, transition:"<?php echo $opt['colorbox_transition']?>", width:"<?php echo $cap_embeder_width ?>", height:"<?php echo $cap_embeder_height ?>", scrolling:<?php echo($cap_embeder_scrollbar=="no")?'false':'true'; ?>});
+			<?php }?>			
+						
 		});
 	</script>	
 	<!--CAP_EMBEDER END-->
 <?php 
 }
 
+function cap_embeder_get_colorbox_themes()
+{
+	$themes=array(
+		"default"=>array("dir"=>"default", "text"=>"Default"),
+		"vintage"=>array("dir"=>"vintage", "text"=>"Vintage"),
+		"dark-rimmed"=>array("dir"=>"dark-rimmed", "text"=>"Dark Rimmed"),
+		"fancy-overlay"=>array("dir"=>"fancy-overlay", "text"=>"Fancy Overlay"),
+		"minimal"=>array("dir"=>"minimal", "text"=>"Minimal"),
+		"minimal-circles"=>array("dir"=>"minimal-circles", "text"=>"Minimal Circles"),
+		"sketch-toon"=>array("dir"=>"sketch-toon", "text"=>"Sketch / Toon"),
+		"noimage"=>array("dir"=>"noimage", "text"=>"No Image"),
+		"noimage-rounded"=>array("dir"=>"noimage-rounded", "text"=>"No Image Rounded"),
+		"noimage-blue"=>array("dir"=>"noimage-blue", "text"=>"No Image Blue"),
+		"noimage-polaroid"=>array("dir"=>"noimage-polaroid", "text"=>"No Image Polaroid"),
+		"shadow"=>array("dir"=>"shadow", "text"=>"Shadow"),
+		"wood-table"=>array("dir"=>"wood-table", "text"=>"Wood Table") 
+	);
+ return $themes;
+
+}
 ?>

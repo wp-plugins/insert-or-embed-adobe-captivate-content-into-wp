@@ -3,27 +3,36 @@
 Plugin Name: Insert or Embed Adobe Captivate Content into Wordpress
 Plugin URI: http://www.elearningplugins.com
 Description: Quickly embed or insert Adobe Captivate content into a post or page
-Version: 1.0
+Version: 2.0
 Author: elearningplugins.com
 Author URI: http://www.elearningplugins.com
 */
-if(!session_id()) session_start();
 define ( 'WP_CAP_EMBEDER_PLUGIN_DIR', dirname(__FILE__)); // Plugin Directory
 define ( 'WP_CAP_EMBEDER_PLUGIN_URL', plugin_dir_url(__FILE__)); // Plugin URL (for http requests)
 
 global $wpdb;
-//$cap_embeder_group_table=$wpdb->prefix."cap_embeder_group";
-//$cap_embeder_group_users_table=$wpdb->prefix."cap_embeder_group_users";
-
-require_once("settings.php");
+require_once("settings_file.php");
 require_once("functions.php");
 include_once(WP_CAP_EMBEDER_PLUGIN_DIR."/include/shortcode.php");
 
+
+
 register_activation_hook(__FILE__,'cap_embeder_install'); 
+
+
+register_deactivation_hook( __FILE__, 'cap_embeder_remove' );
+
 function cap_embeder_install() {
 
 @mkdir(cap_getUploadsPath());
 @file_put_contents(cap_getUploadsPath()."index.html","");
+
+}
+function cap_embeder_remove() {
+
+$cap_upload_path=cap_getUploadsPath();
+if(file_exists($cap_upload_path."/.htaccess")){unlink($cap_upload_path."/.htaccess");}
+
 }
 
 
@@ -56,7 +65,6 @@ function media_upload_cap_content()
 	echo "</div>";
 }
 
-
 function media_upload_cap()
 {
 	wp_iframe( "media_upload_cap_content" );
@@ -82,9 +90,6 @@ function cap_print_tabs()
 	{
 	$newtab1 = array('upload' => 'Upload File');
 	$newtab2 = array('cap' => 'Content Library');
-	/* Hide Group Manager */
-	/*$newtab3 = array('group'=>'Group Manager');*/
-	/*return array_merge($newtab1,$newtab2,$newtab3);*/
 	return array_merge($newtab1,$newtab2);
 	}
 add_filter('media_upload_tabs', 'cap_tabs');
@@ -95,7 +100,7 @@ media_upload_header();
 
 add_action('media_upload_cap_upload','media_upload_cap_upload');
 add_action('media_upload_cap','media_upload_cap');
-add_action( 'media_buttons', 'wp_cap_plugin_media_button',100);
+add_action('media_buttons', 'wp_cap_plugin_media_button',100);
 
 
 /* added by oneTarek --*/
@@ -106,4 +111,6 @@ function cap_embeder_enqueue_script() {
 }    
  
 add_action('wp_enqueue_scripts', 'cap_embeder_enqueue_script');
+
+include_once(WP_CAP_EMBEDER_PLUGIN_DIR."/admin_page.php");
 ?>
