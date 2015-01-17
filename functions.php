@@ -593,6 +593,18 @@ var open_same_window_option= parseInt(jQuery('input[name=open_same_window_option
 
 }
 
+function show_hide_custom_size_area(number)
+{
+	var size_opt=jQuery("#size_opt_"+number).val();
+	if(size_opt=="custom")
+	{
+	jQuery("#custom_size_area_"+number).show();
+	}
+	else
+	{
+	jQuery("#custom_size_area_"+number).hide();
+	}
+}
 
 
 function add_to_post(number)
