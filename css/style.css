@@ -1,0 +1,21 @@
+
+.boxTitle{ text-align:center; margin:0; margin-bottom:5px; border-bottom:1px solid #999999;}
+
+
+
+#tabButtonBox{}
+#tabButtonBox ul{margin:0px; padding:0px; list-style-type:none;}
+#tabButtonBox ul li{ list-style-type:none; float:left; border:1px solid #CCCCCC; font-weight:bold; text-align:center; padding:5px; margin:3 auto;cursor:pointer;  }
+#tabButtonBox ul li.selected{ background:#21759B; color:#FFFFFF}
+
+.membersListInTab ul{color:#bbbbbb; padding-left:50px; text-decoration:none; list-style-type:disc;}
+.membersListInTab ul{color:#bbbbbb; text-decoration:none;}
+
+input[type=checkbox], input[type=radio]
+{
+height:13px; width:12px;
+}
+
+input[type=radio]{-webkit-appearance:radio}
+input[type=radio]:checked:before{ width:6px; height:6px; margin:4px;}
+input[type=checkbox]:checked:before { margin:-9px -7px;}
