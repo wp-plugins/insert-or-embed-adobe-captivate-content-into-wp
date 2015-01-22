@@ -3,7 +3,7 @@
 Plugin Name: Insert or Embed Adobe Captivate Content into Wordpress
 Plugin URI: http://www.elearningplugins.com
 Description: Quickly embed or insert Adobe Captivate content into a post or page
-Version: 2.0
+Version: 2.1
 Author: elearningplugins.com
 Author URI: http://www.elearningplugins.com
 */
