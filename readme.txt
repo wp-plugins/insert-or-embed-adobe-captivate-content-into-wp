@@ -28,7 +28,7 @@ http://www.youtube.com/watch?v=zb4eANMb9Ew
 
 = How do I use this to embed Adobe Captivate content? =
 
-Check out this screencast:  http://www.youtube.com/watch?v=zb4eANMb9Ew
+Check out this screencast:  http://www.youtube.com/watch?v=zb4eANMb9Ew= How do I increase the maximum upload file size? = The maximum upload file size is determined by your hosting provider, not a limit enforced by the WordPress plugin. To increase the limit, you need to update your php.ini file in your wp-admin folder to reflect the following:post_max_size = 150Mmax_execution_time = 60max_input_time = 60upload_max_filesize = 150M(These settings will vary depending upon your server and content. You may need to contact your hosting company to make these changes.
 
 = Why does the upload never finish or I get a -1 error message? = 
 
