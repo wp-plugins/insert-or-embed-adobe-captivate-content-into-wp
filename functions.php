@@ -850,7 +850,7 @@ else
 </table>
 </form>
 
-<p><i>Please choose a .zip file that you published with the Adobe Captivate software | Maximum upload file size: <strong><?php echo $upload_size_unit; echo $sizes[$u]; ?></strong></i></p>
+<p><i>Please choose a .zip file that you published with the Adobe Captivate software | <a href="http://www.elearningplugins.com/increase-maximum-upload-file-size/" target="_blank">Maximum upload file size</a>: <strong><?php echo $upload_size_unit; echo $sizes[$u]; ?></strong></i></p>
 <img id="media_loading" style='display:none;' src= "<?php echo cap_getPluginUrl() . "loading.gif" ;?>" /><br />
 <?php 
 }
