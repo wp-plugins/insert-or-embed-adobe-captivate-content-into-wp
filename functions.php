@@ -10,10 +10,10 @@ function cap_print_page_navi($num_records)
 				$num_pages; 	#holds the total number of pages
 				$page_size = 15;
 				#get the page index
-				if (empty($_GET[npage]) || !is_numeric($_GET[npage]))
+				if (empty($_GET['npage']) || !is_numeric($_GET['npage']))
 				{$page = 1;}
 				else
-				{$page = $_GET[npage];}
+				{$page = $_GET['npage'];}
 				
 				#caluculate number of pages to display
 				if(($num_records%$page_size))
@@ -35,7 +35,7 @@ function cap_print_page_navi($num_records)
 						}
 						else
 						{
-							echo "<a href=\"media-upload.php?type=upload&tab=cap&npage=$i\">$i</a>";
+							echo "<a href=\"media-upload.php?type=cap_upload&tab=cap&npage=$i\">$i</a>";
 			
 						}
 						if($i != $num_pages)
@@ -314,8 +314,8 @@ $cap_UploadsPath=cap_getUploadsPath();
 		{
 			#check for index.html or index.htm
 			$has_index=false;
-			foreach($fileList as $fname){ if($fname== "index.html" || $fname== "index.htm"){$has_index=true; $entryName=$fname; break; } }
-			if(has_index)
+			foreach($fileList as $fname){ if($fname== "index_AICC.html" || $fname== "index.html" || $fname== "index.htm" || $fname== "index_SCORM.html" || $fname== "index_TINCAN.html"){$has_index=true; $entryName=$fname; break; } }
+			if('has_index')
 			{
 				return $entryName;
 			}

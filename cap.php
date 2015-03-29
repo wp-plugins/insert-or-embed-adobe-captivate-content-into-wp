@@ -3,7 +3,7 @@
 Plugin Name: Insert or Embed Adobe Captivate Content into Wordpress
 Plugin URI: http://www.elearningplugins.com
 Description: Quickly embed or insert Adobe Captivate content into a post or page
-Version: 2.1
+Version: 2.12
 Author: elearningplugins.com
 Author URI: http://www.elearningplugins.com
 */
@@ -72,7 +72,7 @@ function media_upload_cap()
 
 function media_upload_cap_upload()
 { 
-	if($_GET['tab']=='cap') #I added this technique because: on wordpress 3.4  'media_upload_cap' action hook does not work.
+	if ( isset( $_REQUEST[ 'tab' ] ) && strstr( $_REQUEST[ 'tab' ], 'cap') )
 	{
 	wp_iframe( "media_upload_cap_content" );
 	}
@@ -96,12 +96,26 @@ add_filter('media_upload_tabs', 'cap_tabs');
 media_upload_header();
 
 }
+if ( ! function_exists ( 'cap_embeder_register_plugin_links' ) ) {
+	function cap_embeder_register_plugin_links( $links, $file ) {
+		$base = plugin_basename(__FILE__);
+		if ( $file == $base ) {
+			if ( ! is_network_admin() )
+			$links[] = '<a href="http://www.elearningplugins.com/products/insert-embed-adobe-captivate-content-wordpress-plugin/" target="_blank">' . __( 'Buy premium version','cap_embeder' ) . '</a>';
+			$links[] = '<a href="admin.php?page=captivate_content">' . __( 'Dashboard','cap_embeder' ) . '</a>';
+			$links[] = '<a href="https://www.youtube.com/watch?v=zb4eANMb9Ew" target="_blank">' . __( 'How to use','cap_embeder' ) . '</a>';
+			$links[] = '<a href="http://www.elearningplugins.com/increase-maximum-upload-file-size/" target="_blank">' . __( 'Maximum upload size','cap_embeder' ) . '</a>';
+			$links[] = '<a href="http://www.elearningplugins.com/support/" target="_blank">' . __( 'Support','cap_embeder' ) . '</a>';
+		}
+		return $links;
+	}
+}
 
 
 add_action('media_upload_cap_upload','media_upload_cap_upload');
 add_action('media_upload_cap','media_upload_cap');
 add_action('media_buttons', 'wp_cap_plugin_media_button',100);
-
+add_filter( 'plugin_row_meta', 'cap_embeder_register_plugin_links', 10, 2 );
 
 /* added by oneTarek --*/
 add_action('wp_head','cap_embeder_wp_head');

@@ -4,6 +4,10 @@
 
 function cap_iframe_handler($attr,$content)
 {
+$colorbox_theme = '';
+$title = ''; 
+$href = ''; 
+$link_text = '';
 $opt=get_cap_embeder_options();
 $cbox_themes=cap_embeder_get_colorbox_themes();
 //echo "<pre>"; print_r( $opt); echo "</pre>";
@@ -20,7 +24,7 @@ $link_text='<img src="'.$button.'" alt="Launch Presentation" />';
 			{
 			  case 'iframe':
 			  {
-			  $return_content= "<iframe src='$src' width='$width' height='$height' frameborder='$border'></iframe>";
+			  $return_content= "<iframe src='$src' width='$width' height='$height' frameborder='0'></iframe>";
 			  $href=$src;
 			  break;
 			  }
