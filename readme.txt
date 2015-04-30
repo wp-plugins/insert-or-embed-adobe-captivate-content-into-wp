@@ -4,7 +4,7 @@ Contributors: elearningplugins.com
 Donate link: http://www.elearningplugins.com
 Tags: adobe, captivate, embed, upload, lightbox, elearning
 Requires at least: 2.0.2
-Tested up to: 4.1.1
+Tested up to: 4.2.1
 Stable tag: 2.12License: GPLv2 or laterLicense URI: http://www.gnu.org/licenses/gpl-2.0.html
  
 Quickly embed or insert Adobe Captivate content into a post or page.
